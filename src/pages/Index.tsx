@@ -11,23 +11,21 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPublishedPosts();
+    const fetchPosts = async () => {
+      // Ab humne 'published' wali shart hata di hai taake data nazar aaye
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error) {
+        setPosts(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchPosts();
   }, []);
-
-  const fetchPublishedPosts = async () => {
-    // Sirf wahi posts jo aapne Admin se Approve ki hain (published: true)
-    const { data, error } = await supabase
-      .from("posts")
-      .withConverter(null)
-      .select("*")
-      .eq("published", true)
-      .order("created_at", { ascending: false });
-
-    if (!error) {
-      setPosts(data || []);
-    }
-    setLoading(false);
-  };
 
   // Dynamic SEO Variables
   const latestPostTitle = posts.length > 0 ? posts[0].title : "Crypto Uptrend";
@@ -37,16 +35,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      {/* --- DYNAMIC SEO SECTION --- */}
       <Helmet>
         <title>{latestPostTitle} | Crypto Uptrend</title>
         <meta name="description" content={seoDescription} />
         <meta property="og:title" content={latestPostTitle} />
         <meta property="og:description" content={seoDescription} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={latestPostTitle} />
-        <meta name="twitter:description" content={seoDescription} />
       </Helmet>
 
       {/* --- HEADER / NAVBAR --- */}
@@ -111,14 +104,12 @@ const Index = () => {
             ) : (
               <div className="col-span-full text-center py-20 bg-white rounded-2xl border-2 border-dashed">
                 <p className="text-gray-400 text-lg">Abhi tak koi news publish nahi hui.</p>
-                <p className="text-gray-400 text-sm">Admin panel se news approve karein.</p>
               </div>
             )}
           </div>
         )}
       </main>
 
-      {/* --- FOOTER --- */}
       <footer className="mt-20 border-t bg-white py-10">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="text-gray-500 text-sm">© 2026 Crypto Uptrend. Managed by Tahir SanaUllah.</p>

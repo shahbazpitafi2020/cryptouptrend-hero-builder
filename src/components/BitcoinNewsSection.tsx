@@ -25,7 +25,7 @@ const sideArticles = [
 
 const BitcoinNewsSection = () => {
   return (
-    <section id="bitcoin-news" className="container py-6">
+    <section id="bitcoin-news">
       <div className="bg-card shadow-sm">
         {/* Section header */}
         <div className="flex items-center justify-between border-b border-border px-5 py-3">

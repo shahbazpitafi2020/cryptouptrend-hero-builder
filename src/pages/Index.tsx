@@ -1,20 +1,33 @@
 import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import FeaturedNews from "@/components/FeaturedNews";
-import MarketTable from "@/components/MarketTable";
-import NewsSection from "@/components/NewsSection";
+import NewsGrid from "@/components/NewsGrid";
+import BitcoinNewsSection from "@/components/BitcoinNewsSection";
+import Sidebar from "@/components/Sidebar";
 import AltcoinSection from "@/components/AltcoinSection";
+import AIWeb3Section from "@/components/AIWeb3Section";
 import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <HeroSection />
-      <FeaturedNews />
-      <MarketTable />
-      <NewsSection />
-      <AltcoinSection />
+      <div className="py-6">
+        <NewsGrid />
+
+        {/* Bitcoin News + Sidebar layout */}
+        <div className="container py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <BitcoinNewsSection />
+            </div>
+            <div>
+              <Sidebar />
+            </div>
+          </div>
+        </div>
+
+        <AltcoinSection />
+        <AIWeb3Section />
+      </div>
       <Footer />
     </div>
   );

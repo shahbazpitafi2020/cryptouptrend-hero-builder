@@ -1,54 +1,31 @@
-import news1 from "@/assets/news-1.jpg";
-import news2 from "@/assets/news-2.jpg";
-import news3 from "@/assets/news-3.jpg";
-import news4 from "@/assets/news-4.jpg";
-import news5 from "@/assets/news-5.jpg";
+import { useAllPublishedPosts } from "@/hooks/usePosts";
+import { timeAgo, getPostImage, placeholderImages } from "@/lib/postUtils";
 
-const slides = [
-  {
-    image: news1,
-    category: "Bitcoin News",
-    title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency",
-    excerpt: "In recent years, an unexpected conversation has emerged at the intersection of faith and finance…",
-    time: "42 minutes ago",
-  },
-  {
-    image: news2,
-    category: "Bitcoin News",
-    title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan",
-    time: "51 minutes ago",
-  },
-  {
-    image: news3,
-    category: "Bitcoin News",
-    title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead",
-    time: "1 hour ago",
-  },
-  {
-    image: news4,
-    category: "Bitcoin News",
-    title: "Bitcoin Community Reacts to Iran Crypto Toll Reports",
-    time: "1 hour ago",
-  },
-  {
-    image: news5,
-    category: "Bitcoin News",
-    title: "Brit Denies Being Bitcoin Creator Named by New York Times",
-    time: "1 hour ago",
-  },
+const fallbackSlides = [
+  { title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency", excerpt: "In recent years, an unexpected conversation has emerged at the intersection of faith and finance…", category: "Bitcoin News", published_at: null, featured_image_url: null },
+  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
+  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
+  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
+  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
 ];
 
 const NewsGrid = () => {
+  const { data: posts } = useAllPublishedPosts(5);
+
+  const slides = posts && posts.length >= 5
+    ? posts.slice(0, 5)
+    : fallbackSlides;
+
   return (
     <section className="container py-0">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2px] bg-foreground/10">
-        {/* Large featured - spans left column on desktop */}
+        {/* Large featured */}
         <a
           href="#"
           className="relative block overflow-hidden md:row-span-2 group min-h-[300px] lg:min-h-[420px]"
         >
           <img
-            src={slides[0].image}
+            src={getPostImage(slides[0], 0)}
             alt={slides[0].title}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             width={800}
@@ -61,7 +38,9 @@ const NewsGrid = () => {
             </span>
           </div>
           <div className="absolute bottom-0 left-0 right-0 p-5">
-            <div className="text-xs text-card/70 mb-2">⏱ {slides[0].time}</div>
+            <div className="text-xs text-card/70 mb-2">
+              ⏱ {slides[0].published_at ? timeAgo(slides[0].published_at) : "Just now"}
+            </div>
             <h2 className="text-xl lg:text-2xl font-semibold text-card leading-snug mb-2">
               {slides[0].title}
             </h2>
@@ -71,7 +50,7 @@ const NewsGrid = () => {
           </div>
         </a>
 
-        {/* Right 4 smaller cards in a 2x2 grid */}
+        {/* Right 4 smaller cards */}
         {slides.slice(1).map((slide, i) => (
           <a
             key={i}
@@ -79,7 +58,7 @@ const NewsGrid = () => {
             className="relative block overflow-hidden group min-h-[200px] lg:min-h-[208px]"
           >
             <img
-              src={slide.image}
+              src={getPostImage(slide, i + 1)}
               alt={slide.title}
               loading="lazy"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -93,7 +72,9 @@ const NewsGrid = () => {
               </span>
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-4">
-              <div className="text-[11px] text-card/70 mb-1.5">⏱ {slide.time}</div>
+              <div className="text-[11px] text-card/70 mb-1.5">
+                ⏱ {slide.published_at ? timeAgo(slide.published_at) : "Just now"}
+              </div>
               <h3 className="text-sm lg:text-[15px] font-semibold text-card leading-snug">
                 {slide.title}
               </h3>

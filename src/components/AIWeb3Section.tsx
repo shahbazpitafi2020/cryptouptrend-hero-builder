@@ -1,26 +1,28 @@
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePosts, useAllPublishedPosts } from "@/hooks/usePosts";
-import { timeAgo, getPostImage, placeholderImages } from "@/lib/postUtils";
+import { timeAgo, getPostImage } from "@/lib/postUtils";
 
 const fallbackFeatured = {
   title: "Tom Lee Bitcoin Ethereum Predictions Hit $250K — Bullish Crypto Forecast",
-  excerpt: "Tom Lee's Bitcoin and Ethereum predictions have taken an even more optimistic turn, with the market analyst raising his Bitcoin price target significantly, suggesting the cryptocurrency market could...",
+  excerpt: "Tom Lee's Bitcoin and Ethereum predictions have taken an even more optimistic turn...",
   category: "AI & Web3",
   published_at: null,
   featured_image_url: null,
+  slug: "",
 };
 
 const fallbackSide = [
-  { title: "Cloudflare Orange Web3 Resilience: Vitaly's Urgent Warning", published_at: null, featured_image_url: null, category: "AI & Web3" },
-  { title: "5 Best Web3 Coins to Buy in January 2026 | Top Picks", published_at: null, featured_image_url: null, category: "AI & Web3" },
-  { title: "How to Build AI Agents on Solana Step-by-Step Guide 2026", published_at: null, featured_image_url: null, category: "AI & Web3" },
+  { title: "Cloudflare Orange Web3 Resilience: Vitaly's Urgent Warning", published_at: null, featured_image_url: null, category: "AI & Web3", slug: "" },
+  { title: "5 Best Web3 Coins to Buy in January 2026 | Top Picks", published_at: null, featured_image_url: null, category: "AI & Web3", slug: "" },
+  { title: "How to Build AI Agents on Solana Step-by-Step Guide 2026", published_at: null, featured_image_url: null, category: "AI & Web3", slug: "" },
 ];
 
 const fallbackMostViewed = [
-  { title: "House Democrats Propose Ban on Politicians Buying Meme Coins" },
-  { title: "5 Best Meme Coins to Buy in January 2026" },
-  { title: "Trump Coin and Meme Token Frenzy: Crypto Winter by Once Bitten" },
-  { title: "Bitcoin Price Prediction: $250K Looming Bull Target" },
+  { title: "House Democrats Propose Ban on Politicians Buying Meme Coins", slug: "" },
+  { title: "5 Best Meme Coins to Buy in January 2026", slug: "" },
+  { title: "Trump Coin and Meme Token Frenzy: Crypto Winter by Once Bitten", slug: "" },
+  { title: "Bitcoin Price Prediction: $250K Looming Bull Target", slug: "" },
 ];
 
 const AIWeb3Section = () => {
@@ -30,8 +32,10 @@ const AIWeb3Section = () => {
   const featured = aiPosts && aiPosts.length > 0 ? aiPosts[0] : fallbackFeatured;
   const sideArticles = aiPosts && aiPosts.length > 1 ? aiPosts.slice(1, 4) : fallbackSide;
   const mostViewed = allPosts && allPosts.length > 0
-    ? allPosts.slice(0, 4).map((p) => ({ title: p.title, featured_image_url: p.featured_image_url }))
-    : fallbackMostViewed.map((p) => ({ ...p, featured_image_url: null }));
+    ? allPosts.slice(0, 4).map((p) => ({ title: p.title, featured_image_url: p.featured_image_url, slug: p.slug }))
+    : fallbackMostViewed.map((p) => ({ ...p, featured_image_url: null as string | null }));
+
+  const postLink = (p: any) => p.slug ? `/post/${p.slug}` : "#";
 
   return (
     <section id="ai-web3" className="container py-6">
@@ -60,7 +64,7 @@ const AIWeb3Section = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5">
               <div>
-                <a href="#" className="group block">
+                <Link to={postLink(featured)} className="group block">
                   <div className="relative overflow-hidden mb-3">
                     <img
                       src={getPostImage(featured, 4)}
@@ -85,11 +89,11 @@ const AIWeb3Section = () => {
                   <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-3">
                     {featured.excerpt || ""}
                   </p>
-                </a>
+                </Link>
               </div>
               <div className="flex flex-col gap-4">
                 {sideArticles.map((article, i) => (
-                  <a key={i} href="#" className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
+                  <Link key={i} to={postLink(article)} className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
                     <img
                       src={getPostImage(article, i + 2)}
                       alt={article.title}
@@ -106,14 +110,13 @@ const AIWeb3Section = () => {
                         {article.title}
                       </h4>
                     </div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Most Viewed sidebar */}
         <div>
           <div className="bg-card shadow-sm">
             <div className="border-b border-border px-5 py-3">
@@ -121,7 +124,7 @@ const AIWeb3Section = () => {
             </div>
             <div className="p-4 flex flex-col gap-4">
               {mostViewed.map((item, i) => (
-                <a key={i} href="#" className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
+                <Link key={i} to={postLink(item)} className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
                   <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
                     {i + 1}
                   </span>
@@ -136,7 +139,7 @@ const AIWeb3Section = () => {
                   <h4 className="text-[12px] font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-3 min-w-0">
                     {item.title}
                   </h4>
-                </a>
+                </Link>
               ))}
             </div>
           </div>

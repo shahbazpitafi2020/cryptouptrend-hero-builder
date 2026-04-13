@@ -1,20 +1,22 @@
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePosts } from "@/hooks/usePosts";
-import { timeAgo, getPostImage, placeholderImages } from "@/lib/postUtils";
+import { timeAgo, getPostImage } from "@/lib/postUtils";
 
 const fallbackFeatured = {
   title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency",
-  excerpt: "In recent years, an unexpected conversation has emerged at the intersection of faith and finance. God and Bitcoin: why some Christians are using crypto as an expression of their beliefs, supporting missions, and envisioning a financial system aligned to...",
+  excerpt: "In recent years, an unexpected conversation has emerged at the intersection of faith and finance. God and Bitcoin: why some Christians are using crypto as an expression of their beliefs...",
   category: "Bitcoin News",
   published_at: null,
   featured_image_url: null,
+  slug: "",
 };
 
 const fallbackSide = [
-  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", published_at: null, featured_image_url: null },
-  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", published_at: null, featured_image_url: null },
-  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", published_at: null, featured_image_url: null },
-  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", published_at: null, featured_image_url: null },
+  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", published_at: null, featured_image_url: null, slug: "" },
 ];
 
 const BitcoinNewsSection = () => {
@@ -23,15 +25,15 @@ const BitcoinNewsSection = () => {
   const featured = posts && posts.length > 0 ? posts[0] : fallbackFeatured;
   const sideArticles = posts && posts.length > 1 ? posts.slice(1, 5) : fallbackSide;
 
+  const postLink = (p: any) => p.slug ? `/post/${p.slug}` : "#";
+
   return (
     <section id="bitcoin-news">
       <div className="bg-card shadow-sm">
         <div className="flex items-center justify-between border-b border-border px-5 py-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-semibold text-section-title flex items-center gap-1.5">
-              <span className="text-lg">₿</span> Bitcoin News
-            </h2>
-          </div>
+          <h2 className="text-base font-semibold text-section-title flex items-center gap-1.5">
+            <span className="text-lg">₿</span> Bitcoin News
+          </h2>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <span className="text-primary font-medium cursor-pointer">All</span>
@@ -55,7 +57,7 @@ const BitcoinNewsSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5">
           <div>
-            <a href="#" className="group block">
+            <Link to={postLink(featured)} className="group block">
               <div className="relative overflow-hidden mb-3">
                 <img
                   src={getPostImage(featured, 0)}
@@ -81,18 +83,18 @@ const BitcoinNewsSection = () => {
               <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-3">
                 {featured.excerpt || ""}
               </p>
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to={postLink(featured)}
               className="inline-block mt-4 text-xs font-semibold uppercase text-primary-foreground bg-primary px-4 py-2 hover:opacity-90 transition-opacity"
             >
               Read More »
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-col gap-4">
             {sideArticles.map((article, i) => (
-              <a key={i} href="#" className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
+              <Link key={i} to={postLink(article)} className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
                 <img
                   src={getPostImage(article, i + 1)}
                   alt={article.title}
@@ -109,7 +111,7 @@ const BitcoinNewsSection = () => {
                     {article.title}
                   </h4>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

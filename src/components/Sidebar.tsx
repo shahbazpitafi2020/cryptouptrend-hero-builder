@@ -1,13 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAllPublishedPosts } from "@/hooks/usePosts";
-import { timeAgo, getPostImage, placeholderImages } from "@/lib/postUtils";
+import { timeAgo, getPostImage } from "@/lib/postUtils";
 
 const fallbackArticles = [
-  { title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency", published_at: null, featured_image_url: null },
-  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", published_at: null, featured_image_url: null },
-  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", published_at: null, featured_image_url: null },
-  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", published_at: null, featured_image_url: null },
-  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", published_at: null, featured_image_url: null },
+  { title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", published_at: null, featured_image_url: null, slug: "" },
+  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", published_at: null, featured_image_url: null, slug: "" },
 ];
 
 type Tab = "recent" | "popular" | "comments";
@@ -22,15 +23,8 @@ const Sidebar = () => {
     { label: "Comments", value: "comments" },
   ];
 
-  const recentArticles = posts && posts.length > 0
-    ? posts.slice(0, 5)
-    : fallbackArticles;
-
-  // For "popular", reverse order as a simple heuristic
-  const popularArticles = posts && posts.length > 0
-    ? [...posts].reverse().slice(0, 5)
-    : fallbackArticles;
-
+  const recentArticles = posts && posts.length > 0 ? posts.slice(0, 5) : fallbackArticles;
+  const popularArticles = posts && posts.length > 0 ? [...posts].reverse().slice(0, 5) : fallbackArticles;
   const articles = activeTab === "recent" ? recentArticles : popularArticles;
 
   return (
@@ -56,26 +50,31 @@ const Sidebar = () => {
           <p className="text-sm text-muted-foreground text-center py-6">No comments yet.</p>
         ) : (
           <div className="flex flex-col gap-4">
-            {articles.map((article, i) => (
-              <a key={i} href="#" className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
-                <img
-                  src={getPostImage(article, i)}
-                  alt={article.title}
-                  loading="lazy"
-                  className="w-[60px] h-[60px] object-cover flex-shrink-0"
-                  width={60}
-                  height={60}
-                />
-                <div className="min-w-0">
-                  <h4 className="text-[13px] font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
-                    {article.title}
-                  </h4>
-                  <p className="text-[11px] text-muted-foreground mt-1">
-                    ⏱ {article.published_at ? timeAgo(article.published_at) : "Just now"}
-                  </p>
-                </div>
-              </a>
-            ))}
+            {articles.map((article, i) => {
+              const slug = "slug" in article ? (article as any).slug : "";
+              const Wrapper = slug ? Link : "a" as any;
+              const linkProps = slug ? { to: `/post/${slug}` } : { href: "#" };
+              return (
+                <Wrapper key={i} {...linkProps} className="group flex gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
+                  <img
+                    src={getPostImage(article, i)}
+                    alt={article.title}
+                    loading="lazy"
+                    className="w-[60px] h-[60px] object-cover flex-shrink-0"
+                    width={60}
+                    height={60}
+                  />
+                  <div className="min-w-0">
+                    <h4 className="text-[13px] font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                      {article.title}
+                    </h4>
+                    <p className="text-[11px] text-muted-foreground mt-1">
+                      ⏱ {article.published_at ? timeAgo(article.published_at) : "Just now"}
+                    </p>
+                  </div>
+                </Wrapper>
+              );
+            })}
           </div>
         )}
       </div>

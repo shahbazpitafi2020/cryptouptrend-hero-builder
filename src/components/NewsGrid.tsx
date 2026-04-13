@@ -1,12 +1,13 @@
+import { Link } from "react-router-dom";
 import { useAllPublishedPosts } from "@/hooks/usePosts";
-import { timeAgo, getPostImage, placeholderImages } from "@/lib/postUtils";
+import { timeAgo, getPostImage } from "@/lib/postUtils";
 
 const fallbackSlides = [
-  { title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency", excerpt: "In recent years, an unexpected conversation has emerged at the intersection of faith and finance…", category: "Bitcoin News", published_at: null, featured_image_url: null },
-  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
-  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
-  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
-  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null },
+  { title: "God and Bitcoin: Why Christians Are Embracing Cryptocurrency", excerpt: "In recent years, an unexpected conversation has emerged at the intersection of faith and finance…", category: "Bitcoin News", published_at: null, featured_image_url: null, slug: "god-and-bitcoin" },
+  { title: "Bitcoin Climbs to Three-Week High on US-Iran Ceasefire Plan", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null, slug: "bitcoin-three-week-high" },
+  { title: "Bitcoin Bear Market Time Pain Trap Signals Slow Bottom Ahead", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null, slug: "bitcoin-bear-market" },
+  { title: "Bitcoin Community Reacts to Iran Crypto Toll Reports", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null, slug: "bitcoin-iran-crypto" },
+  { title: "Brit Denies Being Bitcoin Creator Named by New York Times", category: "Bitcoin News", published_at: null, featured_image_url: null, excerpt: null, slug: "brit-denies-bitcoin" },
 ];
 
 const NewsGrid = () => {
@@ -16,12 +17,13 @@ const NewsGrid = () => {
     ? posts.slice(0, 5)
     : fallbackSlides;
 
+  const postLink = (s: typeof slides[0]) => "slug" in s && s.slug ? `/post/${s.slug}` : "#";
+
   return (
     <section className="container py-0">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2px] bg-foreground/10">
-        {/* Large featured */}
-        <a
-          href="#"
+        <Link
+          to={postLink(slides[0])}
           className="relative block overflow-hidden md:row-span-2 group min-h-[300px] lg:min-h-[420px]"
         >
           <img
@@ -48,13 +50,12 @@ const NewsGrid = () => {
               <p className="text-sm text-card/70 line-clamp-2">{slides[0].excerpt}</p>
             )}
           </div>
-        </a>
+        </Link>
 
-        {/* Right 4 smaller cards */}
         {slides.slice(1).map((slide, i) => (
-          <a
+          <Link
             key={i}
-            href="#"
+            to={postLink(slide)}
             className="relative block overflow-hidden group min-h-[200px] lg:min-h-[208px]"
           >
             <img
@@ -79,7 +80,7 @@ const NewsGrid = () => {
                 {slide.title}
               </h3>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

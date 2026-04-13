@@ -116,9 +116,10 @@ const PostPage = () => {
         )}
 
         {/* Content */}
-        <div className="prose prose-sm md:prose-base max-w-none text-foreground leading-relaxed whitespace-pre-wrap">
-          {post.content}
-        </div>
+        <div
+          className="prose prose-sm md:prose-base max-w-none text-foreground leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
       </article>
 
       {/* Related Articles */}

@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PostPage from "./pages/PostPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,9 @@ const App = () => (
               
               {/* Login Page */}
               <Route path="/auth" element={<Auth />} />
+              
+              {/* Article Page */}
+              <Route path="/post/:slug" element={<PostPage />} />
               
               {/* Admin Panel */}
               <Route path="/admin" element={<Admin />} />

@@ -33,11 +33,13 @@ const Admin = () => {
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + Date.now();
     const { error } = await supabase.from("posts").insert({
       title,
+      slug,
       content,
       published: false, 
-      user_id: user?.id
+      user_id: user?.id!
     });
     if (!error) {
       toast({ title: "Submitted!", description: "Tahir Bhai ko approval ke liye bhej diya gaya hai." });

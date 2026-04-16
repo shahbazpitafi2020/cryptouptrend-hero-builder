@@ -11,7 +11,7 @@ const cols = [
   },
   {
     title: "Company",
-    links: ["About", "Careers", "Contact", "Press Kit", "Advertise", "Partners"],
+    links: ["About", "Careers", "Contact", "Advertise", "Partners"],
   },
   {
     title: "Legal",

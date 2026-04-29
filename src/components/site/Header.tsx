@@ -1,6 +1,6 @@
-import { Search, Wallet, TrendingUp, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, TrendingUp, Menu } from "lucide-react";
 import { useState } from "react";
+import { AdSlot } from "./AdSlot";
 
 const navLinks = [
   { label: "Home", href: "#" },
@@ -17,10 +17,10 @@ export const Header = () => {
 
   return (
     <header className="w-full bg-background">
-      {/* Top tier — white logo bar */}
+      {/* Top tier — white logo bar with ad space */}
       <div className="bg-card border-b border-border">
-        <div className="container-cu flex items-center justify-between py-5">
-          <a href="/" className="flex items-center gap-2 group">
+        <div className="container-cu flex items-center justify-between gap-6 py-4">
+          <a href="/" className="flex items-center gap-2 group shrink-0">
             <span className="grid h-9 w-9 place-items-center rounded-md bg-primary text-primary-foreground">
               <TrendingUp className="h-5 w-5" strokeWidth={2.5} />
             </span>
@@ -29,7 +29,12 @@ export const Header = () => {
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-3 text-sm text-muted-foreground">
+          {/* Header ad slot — desktop leaderboard */}
+          <div className="hidden lg:flex flex-1 justify-center">
+            <AdSlot format="leaderboard" slotId="header-leaderboard" className="my-0" />
+          </div>
+
+          <div className="hidden md:flex lg:hidden items-center gap-3 text-sm text-muted-foreground">
             <span className="font-medium text-foreground">BTC</span>
             <span className="text-cat-altcoin font-semibold">$67,420 ▲ 2.4%</span>
             <span className="mx-2 h-4 w-px bg-border" />
@@ -69,13 +74,6 @@ export const Header = () => {
             >
               <Search className="h-4 w-4" />
             </button>
-            <Button
-              size="sm"
-              className="h-8 rounded-sm font-semibold gap-2 bg-primary hover:bg-primary/90"
-            >
-              <Wallet className="h-4 w-4" />
-              <span className="hidden sm:inline">Connect Wallet</span>
-            </Button>
           </div>
         </div>
 
